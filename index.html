@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  #app {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .product {
+    width: 20%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+
+  .product img {
+    width: 130px;
+    height: 130px;
+  }
+</style>
+<div id="app"></div>
+
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBGeWnFWo1N9f7aLxoqzGx1E6v2EoR2HLM",
+    authDomain: "imps-d2a34.firebaseapp.com",
+    databaseURL: "https://imps-d2a34.firebaseio.com",
+    projectId: "imps-d2a34",
+    storageBucket: "imps-d2a34.appspot.com",
+    messagingSenderId: "870654358141",
+    appId: "1:870654358141:web:1f6823642ddc28a6ad3714"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.database().ref().child('products/');
+
+  // document.querySelectorAll('.t776__btn_second').forEach(i => {
+  //   i.addEventListener('click', function() {
+  //     const block = i.parentElement.parentElement
+  //     const name = block.querySelector('.js-product-name').innerText
+  //     const url = block.querySelector('img').getAttribute('src')
+  //     const descr = block.querySelector('.t-descr').innerText
+
+  //     db.child(name).once('value').then(function(snapshot) {
+  //       data = {}
+  //       let res = snapshot.val()
+  //       if (res) {
+  //         count = res['Кол-во'] + 1
+  //         data[name] = {
+  //           'Кол-во': count,
+  //           'Описание': descr,
+  //           'Картинка': url
+  //         }
+  //         db.update(data)
+  //       }
+  //       else {
+  //         data[name] = {
+  //           'Кол-во': 1,
+  //           'Описание': descr,
+  //           'Картинка': url
+  //         }
+  //         db.update(data)
+  //       }
+  //     })
+  //   })
+  // })
+
+  db.once('value').then(function(snapshot) {
+    const products = snapshot.val()
+    const app = document.querySelector('#app')
+
+    const array = Object.keys(products).map(function(key) {
+      return [key, products[key]];
+    });
+
+    const sorted = array.sort((a, b) => (a[1]['Кол-во'] > b[1]['Кол-во']) ? -1 : 1)
+    console.log(sorted)
+
+    sorted.forEach(item => {
+      const div = document.createElement('div');
+      div.className = "product"
+      div.innerHTML = `
+        <div>${item[0]}</div>
+        <img src="${item[1]['Картинка']}">
+        <div>Кол-во: ${item[1]['Кол-во']}</div>
+        `
+      app.append(div)
+    })
+  })
+  </script>
+</body>
+</html>
