@@ -59,46 +59,6 @@
 
   const db = firebase.database().ref().child('products/');
 
-  document.querySelectorAll('.t776__btn_second').forEach(i => {
-    i.addEventListener('click', function() {
-      if(!this.classList.contains('used')) {
-        const block = i.parentElement.parentElement
-        const name = block.querySelector('.js-product-name').innerText
-        const url = block.querySelector('img').getAttribute('src')
-        const descr = block.querySelector('.t-descr').innerText
-        this.style.background = "#ee0101"
-        this.style.color = "#fff"
-        this.style.border = "0"
-        this.classList.add('used')
-        setTimeout(() => {
-          this.removeAttribute('href')
-        }, 2000);
-
-        db.child(name).once('value').then(function(snapshot) {
-          data = {}
-          let res = snapshot.val()
-          if (res) {
-            count = res['Кол-во'] + 1
-            data[name] = {
-              'Кол-во': count,
-              'Описание': descr,
-              'Картинка': url
-            }
-            db.update(data)
-          }
-          else {
-            data[name] = {
-              'Кол-во': 1,
-              'Описание': descr,
-              'Картинка': url
-            }
-            db.update(data)
-          }
-        })
-      }
-    })
-  })
-
   db.once('value').then(function(snapshot) {
     const products = snapshot.val()
     const app = document.querySelector('#app')
