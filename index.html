@@ -76,8 +76,9 @@
       div.id = item[0]
       div.innerHTML = `
         <div>${item[1]['Имя']}</div>
+        <i>${item[1]['Описание']}</i>
         <img src="${item[1]['Картинка']}">
-        <div>Кол-во: ${item[1]['Кол-во']}</div>
+        <div>Кол-во: <b>${item[1]['Кол-во']}</b></div>
         `
       app.append(div)
     })
